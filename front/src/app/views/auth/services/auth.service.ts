@@ -18,7 +18,7 @@ export class AuthService {
     private cookieService: CookieService
   ) { }
 
-  public login(body: any): Observable<any> {
+  public login(body: any): Observable<any> {    
     return this.http.post<any>(`${this.apiUrl}/login`, body)
   }
 
@@ -55,6 +55,7 @@ export class AuthService {
   public logout = () => new Promise((resolve, reject) => {
     try {
       this.clear();
+      this.redirectLogin();
       resolve(true);
     } catch (e) {
       reject(false);

@@ -8,15 +8,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 // import { ButtonGoBackComponent } from './components/button-go-back/button-go-back.component';
 import { LoadingButtonDirective } from './directives/loading-button.directive';
+import { InputSearchComponent } from './components/input-search/input-search.component';
+import { ButtonGoBackComponent } from './components/button-go-back/button-go-back.component';
 
 
 
 @NgModule({
   declarations: [
-    LoadingButtonDirective
+    LoadingButtonDirective,
+    InputSearchComponent,
+    ButtonGoBackComponent
   ],
   exports: [
-    LoadingButtonDirective
+    LoadingButtonDirective,
+    InputSearchComponent,
+    ButtonGoBackComponent
   ],
   imports: [
     CommonModule,

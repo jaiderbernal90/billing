@@ -10,18 +10,30 @@ import { NotificationInterceptor } from './shared/interceptors/notification.inte
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { IconModule, IconSetModule, IconSetService } from '@coreui/icons-angular';
+import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { HeaderComponent } from './views/base/header/header.component';
+import { DefaultLayoutComponent } from './views/base/default-layout/default-layout.component';
+import { FooterComponent } from './views/base/footer/footer.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    DefaultLayoutComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
+    RouterModule,
     IconModule,
     IconSetModule.forRoot(),
+    TooltipModule.forRoot(),
+    BrowserAnimationsModule,
   ],
   providers: [
     CookieService,

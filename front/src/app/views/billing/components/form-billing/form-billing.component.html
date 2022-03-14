@@ -1,1 +1,71 @@
-<p>form-billing works!</p>
+<form [formGroup]="form" (submit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-3 col-12">
+        <div class="form-group">
+          <label for="">Número de Factura</label>
+          <input type="number" class="form-control" formControlName="number_bill" [class.is-invalid]="isInvalid('number_bill')"
+            [readonly]="isDetail"  [readonly]="editar" />
+        </div>
+      </div>
+      <div class="col-md-3 col-12">
+        <div class="form-group">
+          <label for="">Nombre <small>(Emisor)</small></label>
+          <input type="text" class="form-control" formControlName="full_name_emitter"
+            [class.is-invalid]="isInvalid('full_name_emitter')" [readonly]="isDetail" />
+        </div>
+      </div>
+      <div class="col-md-3 col-12">
+        <div class="form-group">
+            <label for="">NIT <small>(Emisor)</small></label>
+            <input type="number" class="form-control" formControlName="nit_emitter"
+              [class.is-invalid]="isInvalid('nit_emitter')" [readonly]="isDetail" />
+        </div>
+      </div>
+      <div class="col-md-3 col-12">
+        <div class="form-group">
+          <label for="">Nombre <small>(Receptor)</small> </label>
+          <input type="text" class="form-control" formControlName="full_name_purchaser"
+            [class.is-invalid]="isInvalid('full_name_purchaser')" [readonly]="isDetail" />
+        </div>
+      </div>
+      <div class="col-md-3 col-12">
+        <div class="form-group">
+          <label for="">NIT <small>(Receptor)</small> </label>
+          <input type="number" class="form-control" formControlName="nit_purchaser"
+            [class.is-invalid]="isInvalid('nit_purchaser')" [readonly]="isDetail" />
+        </div>
+      </div>
+      <div class="col-md-2 col-12">
+        <div class="form-group">
+          <label for="">Subtotal </label>
+          <input type="number" class="form-control" formControlName="subtotal"
+            [class.is-invalid]="isInvalid('subtotal')" [readonly]="true" />
+        </div>
+      </div>
+      <div class="col-md-2 col-12">
+        <div class="form-group">
+          <label for="">IVA </label>
+          <input type="number" class="form-control" formControlName="iva"
+            [class.is-invalid]="isInvalid('iva')" [readonly]="true" />
+        </div>
+      </div>
+      <div class="col-md-2 col-12">
+        <div class="form-group">
+          <label for="">Total</label>
+          <input type="number" class="form-control" formControlName="total"
+            [class.is-invalid]="isInvalid('total')" [readonly]="true" />
+        </div>
+      </div>
+      <div class="col-12">
+        <button [disabled]="form.invalid" type="submit" class="btn btn-primary mr-1" ngxLoading
+          [loadingFlag]="loading" [textInitial]="'Guardar'" [textLoading]="'Guardando'">
+            Guardar
+        </button>
+        <app-button-go-back></app-button-go-back>
+      </div>
+    </div>
+    <!-- <div class="row">
+        <h4>Detalle</h4>
+    </div> -->
+  </form>
+  

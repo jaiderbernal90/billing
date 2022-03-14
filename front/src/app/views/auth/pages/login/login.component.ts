@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
-      email: ['admin@facturas.com', [Validators.required, Validators.email]],
-      password: ['12345', Validators.required],
+      email: ['admin@facturacion.com', [Validators.required, Validators.email]],
+      password: ['123456', Validators.required],
     })
     this.checkSession();
   }
@@ -37,8 +37,6 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.form.value)
       .pipe((finalize(() => this.loading = false)))
       .subscribe(res => {
-        console.log(res);
-        
         if (res.success) {
           this.authService.setterSettings(res);
           this.router.navigate(['']);
