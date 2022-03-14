@@ -35,15 +35,14 @@ export class BillingComponent implements OnInit, OnDestroy {
     search.trim().length > 0 ? this.filterBillings(0, this.term) : this.getBillings();
   }
 
-  filterBillings(page?: number, term = '',limit = 10) {
+  filterBillings(page?: number, term = '',limit = 10,order = "ASC") {
     const query = [
       `?page=${page ? page : ''}`,
       `&term=${term ? term : ''}`,
+      `&order=${order ? order : ''}`,
       `&limit=${limit}`,
       ].join('');
-      this.crudServices.getRequest(`/billing/getAll${query}`).subscribe((res: any) => {
-        console.log(res);
-        
+      this.crudServices.getRequest(`/billing/getAll${query}`).subscribe((res: any) => {       
         const { billings } = res;
         this.billings = billings.data;
         this.currentPage = page;
@@ -57,8 +56,6 @@ export class BillingComponent implements OnInit, OnDestroy {
     .pipe(finalize(() => this.loading = false))
     .subscribe((res: any) => {
       const { billings } = res;
-      console.log(res);
-      
       this.currentPage = billings.current_page;
       this.totalItems = billings.total;
       this.billings = billings.data;
@@ -67,12 +64,9 @@ export class BillingComponent implements OnInit, OnDestroy {
   }
 
   listenObserver = () => {
-    const observer1$ = this.modalGlobalService.event.subscribe(() => {
-      console.log('2');
+    const observer1$ = this.crudServices.requestEvent.subscribe(() => {
       this.getBillings();
-    })
-    console.log('asddassd');
-    
+    })    
     this.listSubscribers = [observer1$];
   }
 
@@ -90,6 +84,10 @@ export class BillingComponent implements OnInit, OnDestroy {
 
   onChangeRegisterNumber(limit:number){    
     this.filterBillings(1,'',limit);
+  }
+
+  onChangeOrder(event:string){
+    this.filterBillings(1,'',0,event.toUpperCase());
   }
 
 }

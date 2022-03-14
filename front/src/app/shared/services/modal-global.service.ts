@@ -4,6 +4,6 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
   providedIn: 'root'
 })
 export class ModalGlobalService {
-  @Output() event = new EventEmitter<string>();
+  @Output() requestEvent = new EventEmitter<string>();
   constructor() { }
 }

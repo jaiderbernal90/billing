@@ -18,6 +18,7 @@ class BillingController extends Controller
     {
         $page = $request->get('page') ? $request->get('page') : 1;
         $limit = $request->get('limit') ? $request->get('limit') : 10;
+        $order = $request->get('order') ? $request->get('order') : 'DESC';
 
         $term = $request->get('term');
 
@@ -29,7 +30,7 @@ class BillingController extends Controller
             $query->where('number_bill', 'like', "%$term%");
             $query->orWhere('nit_emitter', 'like', "%$term%");
             $query->orWhere('nit_purchaser', 'like', "%$term%");
-        })->orderBy('id', 'DESC')->paginate($limit);
+        })->orderBy('id', $order)->paginate($limit);
 
         return response()->json([
             'status' => 'OK',
