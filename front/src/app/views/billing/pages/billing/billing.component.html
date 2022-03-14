@@ -1,0 +1,35 @@
+<div class="animated fadeIn mt-5">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3 mb-4 d-flex">
+                <app-input-search (submited)="filter($event)"></app-input-search>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <select class="form-control" (change)="onChangeOrder($event.target.value)">
+                    <option value="asc">Ascendente</option>
+                    <option value="desc">Descendente</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-7 mt-1 mb-2 text-right">
+                <button type="button" class="btn btn-default btn-success btn-md" tooltip="Adicionar" placement="bottom" [routerLink]="['create']" ><i class="fa fa-plus"></i></button>
+              </div>
+            </div>
+            <ng-container>
+              <app-list-billing [billings]="billings"></app-list-billing>
+            </ng-container>
+        
+            <div class="float-right">
+              <pagination [totalItems]="totalItems" [(ngModel)]="currentPage" (pageChanged)="pageChanged($event)">
+              </pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+

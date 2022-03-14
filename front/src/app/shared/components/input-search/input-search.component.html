@@ -1,0 +1,8 @@
+<div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text"><i class="fas fa-search"></i></span>
+    </div>
+    <input #term type="text" id="input1-group1" name="input1-group1" class="form-control"
+      [placeholder]="'Buscar'" [formControl]="inputSearch" autocomplete="off"
+      (keyup.enter)="onChange(term.value)">
+  </div>
