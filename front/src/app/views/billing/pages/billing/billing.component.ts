@@ -77,8 +77,6 @@ export class BillingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('asdasdsd');
-    
     this.listSubscribers.map(a => a.unsubscribe());
   }
 
