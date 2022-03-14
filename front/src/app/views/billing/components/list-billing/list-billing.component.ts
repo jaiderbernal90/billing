@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BsModalService } from 'ngx-bootstrap/modal';
 import { CrudService } from 'src/app/shared/services/crud.service';
+import { ModalGlobalService } from 'src/app/shared/services/modal-global.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 
 @Component({
@@ -12,9 +14,11 @@ export class ListBillingComponent implements OnInit {
 
   @Input() billings: any[] = [];
   constructor(
-    private router: Router,
+    private modalService: BsModalService,
     private notification: NotificationService,
-    private crudService: CrudService
+    private crudService: CrudService,
+    private modalGlobalService: ModalGlobalService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {

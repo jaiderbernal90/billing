@@ -21,7 +21,7 @@ class CreateBillingTable extends Migration
             $table->string("full_name_purchaser",100);
             $table->string("nit_purchaser",15);
             $table->decimal("subtotal",10,2);
-            $table->decimal("iva",10,2);
+            $table->decimal("iva",10,0);
             $table->decimal("total",10,2);
             $table->timestamps();
         });

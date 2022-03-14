@@ -21,6 +21,8 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('logout', [AuthController::class, 'logout'] );
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::post('me', [AuthController::class, 'me']);
+    Route::post('register', [AuthController::class, 'register']);
+    
 });
 
 Route::group(['prefix' => 'billing'], function ($router) {

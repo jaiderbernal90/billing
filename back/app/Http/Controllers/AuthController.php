@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -28,12 +30,64 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json([
+                'status' => 'ERROR',
+                'success' => false,
+                'message' => 'Credenciales incorrectas'
+            ]);
         }
 
         return $this->respondWithToken($token);
     }
 
+        /**
+     * Store a new user.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function register(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        try {
+
+            $userExits = User::where('email', $request->input('email'))->first();
+
+            if ($userExits) {
+                return response()->json([
+                    'status' => 'ERROR',
+                    'success' => false,
+                    'message' => 'Ya existe un usuario registrado con el email ingresado'
+                ]);
+            }
+
+
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $plainPassword = $request->input('password');
+            $user->password = app('hash')->make($plainPassword);
+
+            $user->save();
+
+            return response()->json(['user' => $user, 'message' => 'CREATED'], 201);
+        } catch (\Exception $th) {
+
+            return var_dump($th);
+            return response()->json([
+                'status' => 'ERROR',
+                'success' => false,
+                'message' => 'El usuario no pudo ser guardado',
+                'error' => $th
+            ]);
+        }
+    }
+    
     /**
      * Get the authenticated User.
      *

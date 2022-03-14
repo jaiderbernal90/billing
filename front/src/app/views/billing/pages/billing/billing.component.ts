@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { ModalGlobalService } from 'src/app/shared/services/modal-global.service
   templateUrl: './billing.component.html',
   styleUrls: ['./billing.component.scss']
 })
-export class BillingComponent implements OnInit {
+export class BillingComponent implements OnInit, OnDestroy {
 
   listSubscribers: Subscription[] = [];
   term:string = '';
@@ -20,11 +20,10 @@ export class BillingComponent implements OnInit {
   lastPage: number = 0;
 
   constructor(
-    // private modalService: BsModalService,
+    private modalService: BsModalService,
     private modalGlobalService: ModalGlobalService,
     private crudServices: CrudService,
   ) { }
-
 
   ngOnInit(): void {
     this.getBillings();
@@ -58,6 +57,7 @@ export class BillingComponent implements OnInit {
     .pipe(finalize(() => this.loading = false))
     .subscribe((res: any) => {
       const { billings } = res;
+      console.log(res);
       
       this.currentPage = billings.current_page;
       this.totalItems = billings.total;
@@ -68,9 +68,11 @@ export class BillingComponent implements OnInit {
 
   listenObserver = () => {
     const observer1$ = this.modalGlobalService.event.subscribe(() => {
+      console.log('2');
       this.getBillings();
     })
-
+    console.log('asddassd');
+    
     this.listSubscribers = [observer1$];
   }
 
@@ -81,6 +83,8 @@ export class BillingComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
+    console.log('asdasdsd');
+    
     this.listSubscribers.map(a => a.unsubscribe());
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
@@ -21,13 +21,15 @@ export class FormBillingComponent implements OnInit {
   loading: boolean = false;
   page: number = 1;
   editar:boolean = false;
+  detail: any = [];
+  p: number = 1;
 
   constructor(
     private formBuilder: FormBuilder,
     private crudServices: CrudService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    // private modalService: BsModalService,
+    private modalService: BsModalService,
   ) { }
 
   ngOnInit(): void {
@@ -40,6 +42,7 @@ export class FormBillingComponent implements OnInit {
       subtotal: [0,Validators.required],
       iva: [0, Validators.required],
       total: [0, Validators.required],
+      details: this.formBuilder.array([]),
     });
 
     this.activatedRoute.params.subscribe((params) => {
@@ -81,6 +84,11 @@ export class FormBillingComponent implements OnInit {
         const { success, data } = res;
         if (success) {
           this.form.patchValue(data);
+          console.log(res);
+          
+          this.details.patchValue(data.details);
+          this.setBillingForm(data.details,"update");
+
         }
       });
   }
@@ -91,6 +99,85 @@ export class FormBillingComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.listSubscribers.map(a => a.unsubscribe());
+  }
+
+  // DETAIL
+  get details() {
+    return this.form.controls["details"] as FormArray;
+  }
+
+  addDetail(){
+    let id = this.detail.length+1; 
+    
+    let detailArray = [];
+    detailArray.push({
+      id:id,
+      item_description: null,
+      quantity: null,
+      total_und: null,
+      total: null,
+    });
+
+    this.setBillingForm(detailArray,"new");
+  }
+  setBillingForm(billing: any,action = "") {
+    billing.forEach((bill:any,index:number) => {      
+      const lessonForm = this.formBuilder.group({
+        id: [bill.id],
+        item_description: [bill.item_description,[Validators.required]],
+        quantity: [bill.quantity,[Validators.required]],
+        total_und: [bill.total_und,[Validators.required]],
+        total: [bill.total, [Validators.min(1)]],
+      });      
+      this.details.push(lessonForm);   
+    });        
+  }
+  deleteDetail(event:any):void {    
+    event = (this.p >= 2 && this.p > 1) ? 10 + event : event;
+    event = (this.p > 2) ? (parseInt(`${this.p-2}0`) + event) : event;
+    
+    this.details.controls = this.removeItemFromArr( this.details.controls, event );
+    this.calculateTotal();
+  }
+
+  removeItemFromArr ( arr:any, item:any ):any {
+    var i;
+    let elem = arr;
+    
+    for (let k in elem ) {      
+      if (k == (item)){
+          i = k;
+      }
+    }
+    arr.splice( i, 1 );
+    return elem;
+  }
+
+  onChangeTotal(number:any){
+   let quantity = this.details.controls[number].get("quantity").value,
+   total_und = this.details.controls[number].get("total_und").value;
+
+    if(quantity && total_und){
+      this.details.controls[number].patchValue({ total: total_und * quantity });
+    }
+    this.calculateTotal();
+  }
+
+  calculateTotal() {
+    let total = 0,details = this.details.controls,iva = this.form.get("iva").value;
+    
+    details.forEach((detail)=>{
+      detail = detail.value;      
+      total += (detail['total'] != null) ? parseInt(detail['total']) : 0; 
+    })
+    
+    this.form.patchValue({subtotal:total,total: total })
+    if(iva){
+      const ivaT = total*iva/100,
+      tT = total+ivaT
+
+      this.form.patchValue({total: tT.toFixed(0)})
+    }
   }
 
 }

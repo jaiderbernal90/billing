@@ -16,6 +16,10 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { HeaderComponent } from './views/base/header/header.component';
 import { DefaultLayoutComponent } from './views/base/default-layout/default-layout.component';
 import { FooterComponent } from './views/base/footer/footer.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { LoaderInterceptor } from './shared/interceptors/loader.interceptor';
+
 
 @NgModule({
   declarations: [
@@ -34,15 +38,23 @@ import { FooterComponent } from './views/base/footer/footer.component';
     IconSetModule.forRoot(),
     TooltipModule.forRoot(),
     BrowserAnimationsModule,
+    ModalModule.forRoot(),
+    NgxSpinnerModule
   ],
   providers: [
     CookieService,
     {
       provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true
     },
-    // {
-    //   provide: HTTP_INTERCEPTORS, useClass: NotificationInterceptor, multi: true
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS, useClass: NotificationInterceptor, multi: true
+    },
+  
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy

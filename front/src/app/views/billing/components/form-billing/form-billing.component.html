@@ -46,7 +46,7 @@
         <div class="form-group">
           <label for="">IVA </label>
           <input type="number" class="form-control" formControlName="iva"
-            [class.is-invalid]="isInvalid('iva')" [readonly]="true" />
+            [class.is-invalid]="isInvalid('iva')" [readonly]="isDetail" />
         </div>
       </div>
       <div class="col-md-2 col-12">
@@ -56,16 +56,69 @@
             [class.is-invalid]="isInvalid('total')" [readonly]="true" />
         </div>
       </div>
-      <div class="col-12">
-        <button [disabled]="form.invalid" type="submit" class="btn btn-primary mr-1" ngxLoading
-          [loadingFlag]="loading" [textInitial]="'Guardar'" [textLoading]="'Guardando'">
-            Guardar
-        </button>
-        <app-button-go-back></app-button-go-back>
+      <div class="col-md-2 col-12 d-flex align-items-center" *ngIf="!isDetail">
+            <button type="button" class="btn btn-success btn-md" tooltip="Adicionar Producto" placement="bottom" (click)="addDetail()">
+            <i class="fa fa-plus"></i>
+          </button>
       </div>
     </div>
-    <!-- <div class="row">
-        <h4>Detalle</h4>
-    </div> -->
+    <div class="row">
+        <div class="col-12">
+            <h6>Detalle</h6>
+        </div>
+        <div class="col-12">
+            <table class="table table-sm table-responsive-sm">
+                <thead>
+                  <tr>
+                    <th>Descripción Item</th>
+                    <th>Cantidad</th>
+                    <th>Valor Unitario</th>
+                    <th>Valor Total</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <ng-container formArrayName="details">
+                      <!-- <tr *ngFor="let elementForm of details.controls | paginate: { itemsPerPage: 10, currentPage: p }; let i = index"> -->
+                    <tr *ngFor="let detailForm of details.controls | paginate: { itemsPerPage: 10, currentPage: p }; let i = index">
+                        <ng-container [formGroup]="detailForm">
+                          <td width="50%">
+                            <input type="text" class="form-control" formControlName="item_description" [readonly]="isDetail">
+                          </td>
+                          <td>
+                            <input type="number" class="form-control" formControlName="quantity" [readonly]="isDetail" (input)="onChangeTotal(i)">
+                          </td>
+                          <td>
+                            <input type="number" class="form-control" formControlName="total_und" [readonly]="isDetail" (input)="onChangeTotal(i)">
+                          </td>
+                          <td>
+                            <input type="number" class="form-control" formControlName="total" [readonly]="true">
+                          </td>
+                          <td>
+                            <ng-container *ngIf="!isDetail" >
+                              <button type="button" class="btn btn-danger btn-sm" tooltip="Eliminar" placement="bottom" (click)="deleteDetail(i)">
+                                <i class="fa fa-trash"></i>
+                                </button>
+                            </ng-container>
+                          </td> 
+                        </ng-container>
+                    </tr>
+                    </ng-container>
+                </tbody>
+              </table>
+              <div class="float-right">
+                <pagination-controls (pageChange)="p = $event"></pagination-controls>
+              </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button [disabled]="form.invalid" type="submit" class="btn btn-primary mr-1" ngxLoading
+              [loadingFlag]="loading" [textInitial]="'Guardar'" [textLoading]="'Guardando'">
+                Guardar
+            </button>
+            <app-button-go-back></app-button-go-back>
+          </div>
+    </div>
   </form>
   
