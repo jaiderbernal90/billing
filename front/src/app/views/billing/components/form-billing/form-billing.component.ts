@@ -83,9 +83,7 @@ export class FormBillingComponent implements OnInit {
       .subscribe((res: any) => {
         const { success, data } = res;
         if (success) {
-          this.form.patchValue(data);
-          console.log(res);
-          
+          this.form.patchValue(data);          
           this.details.patchValue(data.details);
           this.setBillingForm(data.details,"update");
 
