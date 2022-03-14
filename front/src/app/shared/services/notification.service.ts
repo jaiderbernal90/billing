@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 @Injectable({
   providedIn: 'root'
@@ -7,7 +6,6 @@ import Swal from 'sweetalert2';
 export class NotificationService {
 
   constructor(
-    private translateService: TranslateService
   ) { }
 
   success(title = '', text = '') {
@@ -34,15 +32,9 @@ export class NotificationService {
   }
 
   confirmDelete = (message = '') => {
-    let title = ''
-    let text = ''
+    let title = 'Confirmar'
+    let text = 'Desea Eliminar este elemento?'
 
-    this.translateService.get(`deleteMessage.${message}`).subscribe(res => {
-      if (res.title) {
-        title = res.title;
-        text = res.text;
-      }
-    })
     return new Promise((resolve, reject) => {
       Swal.fire({
         title,

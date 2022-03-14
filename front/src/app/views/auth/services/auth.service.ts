@@ -15,15 +15,15 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    @Inject(String) private cookieService: CookieService
+    private cookieService: CookieService
   ) { }
 
   public login(body: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/login`, body)
+    return this.http.post<any>(`${this.apiUrl}/login`, body)
   }
 
   public refreshToken() {
-    return this.http.get(`${this.apiUrl}/auth/refresh`);
+    return this.http.get(`${this.apiUrl}/refresh`);
   }
 
   setterSettings = (res: any) => {

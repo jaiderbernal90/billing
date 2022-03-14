@@ -15,8 +15,7 @@ import { AuthService } from '../../views/auth/services/auth.service';
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
   constructor(
-    private cookieService: CookieService,
-    private authService: AuthService,
+    private cookieService: CookieService
   ) { }
 
   intercept(req: HttpRequest<any>,
@@ -32,29 +31,9 @@ export class JwtInterceptor implements HttpInterceptor {
       });
 
     }
-
-    return next.handle(request).pipe(
-      tap((response: HttpResponse<any>) => {
-        const { body } = response;
-        const route = req.url.split('/').pop();
-        // console.log(route);
-
-        // if (body && route !== 'refresh') {
-
-        //   this.authService.refreshToken().subscribe((res: any) => {
-        //     if (res) {
-        //       this.authService.setterSettings(res)
-        //       request = req.clone({
-        //         setHeaders: {
-        //           authorization: `Bearer ${this.cookieService.get('token')}`,
-        //         },
-        //       });
-        //     }
-        //   })
-        //   return next.handle(request);
-        // }
-      })
-    );
+    console.log(request);
+    
+     return next.handle(request);
 
   }
 

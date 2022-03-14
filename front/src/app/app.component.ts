@@ -1,10 +1,18 @@
 import { Component } from '@angular/core';
+import { IconSetService } from '@coreui/icons-angular';
+import { freeSet } from '@coreui/icons';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  template: `<router-outlet></router-outlet>`,
+  providers: [IconSetService],
 })
 export class AppComponent {
-  title = 'front';
+  title = '';
+  constructor(
+    public iconSet: IconSetService,
+  ) {
+    iconSet.icons = { ...freeSet };
+  }
+
 }

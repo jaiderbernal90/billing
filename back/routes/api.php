@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BillingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,13 +16,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+Route::group(['middleware' => 'api'], function ($router) {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout'] );
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('me', [AuthController::class, 'me']);
+});
 
-Route::post('register', 'App\Http\Controllers\UserController@register');
-Route::post('login', 'App\Http\Controllers\UserController@authenticate');
-
-Route::group(['middleware' => ['jwt.verify']], function() {
-    Route::post('user','App\Http\Controllers\UserController@getAuthenticatedUser');
+Route::group(['prefix' => 'billing'], function ($router) {
+    Route::get('getAll', [BillingController::class, 'index']);
+    Route::get('get/{id}', [BillingController::class, 'show'] );
+    Route::post('create', [BillingController::class, 'create'] );
+    Route::post('update/{id}', [BillingController::class, 'update']);
+    Route::delete('delete/{id}', [BillingController::class, 'destroy']);
 });
